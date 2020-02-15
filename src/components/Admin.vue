@@ -111,7 +111,6 @@ export default {
             user: "",
             password: "",
             log_success: false,
-            res_msg: "",
             showdelete: false
         }
     },
@@ -136,7 +135,7 @@ export default {
                 headers: { Authorization: `Bearer ${jwtToken}` }
             };
 
-            await axios.post("http://localhost:5000/api/scores/query", data, config)
+            await axios.post("https://quiz-scores-admin.herokuapp.com/api/scores/query", data, config)
                 .then((res) => {
                     if(res.data.token === false) {
                         this.log_success = false;
@@ -166,7 +165,7 @@ export default {
                 headers: { Authorization: `Bearer ${jwtToken}` }
             };
 
-            await axios.delete("http://localhost:5000/api/scores/admin/"+_id, config)
+            await axios.delete("https://quiz-scores-admin.herokuapp.com/api/scores/admin/"+_id, config)
                 .then((res) => {
                     if(res.data.token === false) {
                         this.log_success = false;
@@ -185,7 +184,7 @@ export default {
                 headers: { Authorization: `Bearer ${jwtToken}` }
             };
 
-            await axios.get("http://localhost:5000/api/scores/admin", config)
+            await axios.get("https://quiz-scores-admin.herokuapp.com/api/scores/admin", config)
                 .then((res) => {
                     if(res.data.token === false) {
                         this.log_success = false;
@@ -205,7 +204,7 @@ export default {
             "pw": this.password 
             };
 
-            axios.post("http://localhost:5000/api/login", data)
+            axios.post("https://quiz-scores-admin.herokuapp.com/api/login/", data)
             .then((res) => {
                 this.res_msg = res.data.msg;
                 if(res.data.token !== false) {
