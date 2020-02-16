@@ -7,7 +7,7 @@
         <div v-if="log_success === false">
             <div class="container">
                 <form class="form">
-                    <b-field label="Username:">
+                    <b-field label="Username">
                         <b-input type="text" value="Username" v-model="user"></b-input>
                     </b-field>
                     <b-field label="Password">
@@ -72,7 +72,7 @@
             <div v-if="showdelete === true">
                 <!--Show all scores as elements, so the can be deleted-->
                 <div v-bind:key="ascore._id" v-for="ascore in scorelist">
-                <Score v-bind:ascore="ascore" v-on:del-score="delete_score" />
+                <Score v-bind:ascore="ascore" v-on:del-score="get_table" />
                 </div>
             </div>
     
@@ -115,6 +115,14 @@ export default {
         }
     },
     methods: {
+        deleted_item: function(item) {
+            if (item) {
+                this.get_table();
+                this.showdelete = false;
+            } else {
+                this.log_success = false;
+            }
+        },
         reload_table: async function(e) {
             e.preventDefault();
             this.get_table();
@@ -149,31 +157,8 @@ export default {
 
         show_delete: function (e) {
             e.preventDefault();
-            if(this.showdelete){
-                this.showdelete = false;
-            } else {
-                this.showdelete = true;
-            }
-        },
 
-        delete_score: async function (_id) {
-            this.showdelete = false;
-
-            let jwtToken = localStorage.getItem("quizToken");
-
-            const config = {
-                headers: { Authorization: `Bearer ${jwtToken}` }
-            };
-
-            await axios.delete("https://quiz-scores-admin.herokuapp.com/api/scores/admin/"+_id, config)
-                .then((res) => {
-                    if(res.data.token === false) {
-                        this.log_success = false;
-                    }
-                    if(res.status(200)) {
-                        this.reload_table();
-                    }
-                });
+            this.showdelete = !this.showdelete;
         },
 
         get_table: async function () {
